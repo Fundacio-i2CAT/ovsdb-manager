@@ -11,7 +11,7 @@ Ovsdb Manager is an OVSDB Python Client developed by the [i2CAT Foundation](http
 
 ## Installation
 ```
-pip install ovsdb-manager
+pip install ovsdbmanager
 ```
 
 ## Usage
