@@ -7,7 +7,7 @@ Ovsdb Manager is an OVSDB Python Client developed by the [i2CAT Foundation](http
  Author: Ferran Cañellas <ferran.canellas@i2cat.net>
  
 ## Requirements
-* Python 3.5 or grater
+* Python 3.5 or greater
 
 ## Installation
 ```
