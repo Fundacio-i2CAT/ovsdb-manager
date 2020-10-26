@@ -1,5 +1,5 @@
 """
-OvsController class.
+OvsInterface class.
 
      Copyright (C) 2020  Fundació Privada I2CAT, Internet i Innovació digital a Catalunya
 
@@ -19,24 +19,8 @@ OvsController class.
      Authors: Ferran Cañellas <ferran.canellas@i2cat.net>
 """
 
-from ovsdbmanager.tables.ovs import OpenVSwitch
-from ovsdbmanager.condition import get_by_uuid
+from ovsdbmanager.db.ovs import OpenVSwitch
 
 
-class OvsController(OpenVSwitch):
-    """
-    Class that represents an OvS controller.
-    """
-    def _update_controller_object(self):
-        self.__dict__ = self.api.get_controller(uuid=self.uuid).__dict__
-
-    def set_connection_mode(self, mode: str):
-        """
-        Sets the connection mode to the controller
-        :param mode: the mode
-        :return:
-        """
-        self.api.query.update_table("Controller",
-                                    row={"connection_mode": mode},
-                                    where=[get_by_uuid(self.uuid)])
-        self._update_controller_object()
+class OvsInterface(OpenVSwitch):
+    pass

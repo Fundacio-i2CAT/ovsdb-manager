@@ -18,16 +18,21 @@ OvsBridge class.
 
      Authors: Ferran Cañellas <ferran.canellas@i2cat.net>
 """
-
+from enum import Enum
 from typing import List
 
 from ovsdbmanager import operation
 from ovsdbmanager.exception import OvsdbResourceNotFoundException, OvsdbQueryException
 from ovsdbmanager.utils import generate_uuid, named_uuid
 from ovsdbmanager.condition import get_by_uuid
-from ovsdbmanager.tables.ovs import OpenVSwitch
-from ovsdbmanager.tables.port import OvsPort
-from ovsdbmanager.tables.controller import OvsController
+from ovsdbmanager.db.ovs import OpenVSwitch
+from ovsdbmanager.db.port import OvsPort
+from ovsdbmanager.db.controller import OvsController
+
+
+class FailMode(Enum):
+    STANDALONE = "standalone"
+    SECURE = "secure"
 
 
 class OvsBridge(OpenVSwitch):
@@ -61,14 +66,14 @@ class OvsBridge(OpenVSwitch):
                                     where=[get_by_uuid(self.uuid)])
         self._update_bridge_object()
 
-    def set_fail_mode(self, mode: str):
+    def set_fail_mode(self, mode: FailMode):
         """
         Sets the fail mode of the bridge
         :param mode: the mode
         :return:
         """
         self.api.query.update_table("Bridge",
-                                    row={"fail_mode": mode},
+                                    row={"fail_mode": mode.value},
                                     where=[get_by_uuid(self.uuid)])
         self._update_bridge_object()
 
@@ -193,3 +198,4 @@ class OvsBridge(OpenVSwitch):
                                     row={"ports": ["set", local_port]},
                                     where=[get_by_uuid(self.uuid)])
         self._update_bridge_object()
+

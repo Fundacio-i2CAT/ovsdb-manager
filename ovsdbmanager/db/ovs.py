@@ -1,5 +1,5 @@
 """
-OvsPort class.
+OpenVSwitch class - base class for all the db.
 
      Copyright (C) 2020  Fundació Privada I2CAT, Internet i Innovació digital a Catalunya
 
@@ -19,16 +19,22 @@ OvsPort class.
      Authors: Ferran Cañellas <ferran.canellas@i2cat.net>
 """
 
-from ovsdbmanager.tables.ovs import OpenVSwitch
+import json
 
 
-class OvsPort(OpenVSwitch):
-    """
-    Class that represents an OvS port
-    """
-    def get_interface(self):
-        """
-        Gets the first interface associated with a port
-        :return:
-        """
-        return self.api.get_interface(getattr(self, "interfaces"))
+class OpenVSwitch:
+    def __init__(self, data, api):
+        self.__dict__ = data
+        self.api = api
+
+    def __str__(self):
+        tmp_json = self.__dict__.copy()
+        try:
+            del tmp_json["api"]
+        except KeyError:
+            pass
+        return json.dumps(tmp_json)
+
+    @property
+    def uuid(self):
+        return getattr(self, "_uuid")
