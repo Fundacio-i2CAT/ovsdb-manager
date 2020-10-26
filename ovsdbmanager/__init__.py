@@ -25,11 +25,11 @@ from ovsdbmanager import operation
 from ovsdbmanager.condition import get_by_uuid, get_by_name
 from ovsdbmanager.exception import OvsdbQueryException, OvsdbResourceNotFoundException
 from ovsdbmanager.query import OvsdbQuery
-from ovsdbmanager.tables.bridge import OvsBridge
-from ovsdbmanager.tables.controller import OvsController
-from ovsdbmanager.tables.interface import OvsInterface
-from ovsdbmanager.tables.ovs import OpenVSwitch
-from ovsdbmanager.tables.port import OvsPort
+from ovsdbmanager.db.bridge import OvsBridge
+from ovsdbmanager.db.controller import OvsController
+from ovsdbmanager.db.interface import OvsInterface
+from ovsdbmanager.db.ovs import OpenVSwitch
+from ovsdbmanager.db.port import OvsPort
 from ovsdbmanager.utils import generate_uuid, named_uuid
 
 
