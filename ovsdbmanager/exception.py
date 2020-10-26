@@ -24,3 +24,11 @@ class OvsdbResourcesExhausted(OvsdbCommitException):
 
 class OvsdbIOError(OvsdbCommitException):
     pass
+
+
+class OvsdbSyntaxError(Exception):
+    pass
+
+
+class OvsdbUnknownDatabase(Exception):
+    pass

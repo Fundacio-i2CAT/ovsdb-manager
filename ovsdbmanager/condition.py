@@ -27,7 +27,7 @@ specified below, <value> MUST have the same type as <column>.
 from typing import List
 
 
-def get_by_uuid(uuid: str) -> List[str]:
+def get_by_uuid(uuid: List) -> List[str]:
     """
     Builds a condition to match the uuid passed as parameter.
 
