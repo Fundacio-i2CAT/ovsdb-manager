@@ -19,7 +19,7 @@ Helper module for handling UUIDs
      Authors: Ferran Cañellas <ferran.canellas@i2cat.net>
 """
 
-from typing import List
+from typing import List, Dict
 from uuid import uuid4
 
 
@@ -38,3 +38,11 @@ def named_uuid(uuid: str) -> List:
     :return: The named-uuid list
     """
     return ["named-uuid", uuid]
+
+
+def parse_map(map_: List) -> Dict:
+    return {elem[0]: elem[1] for elem in map_}
+
+
+def add_to_map(map_: List, key: str, value: str) -> List:
+    return map_[1].append([key, value])
