@@ -143,14 +143,21 @@ class OvsBridge(OpenVSwitch):
             ports.append(port)
         return ports
 
-    def add_port(self, port: str, patch_peer: str = None):
+    def add_port(self, port: str, patch_peer: str = None, *, may_exist=False):
         """
         Adds a port to the bridge
         :param port: name of the interface to attach
         :param patch_peer: if the port connects with another bridge,
         name of the patch port of the other bridge.
+        :param may_exist: asdasdd
         :return: query response
         """
+        if may_exist:
+            try:
+                self.get_port(port)
+                return
+            except OvsdbResourceNotFoundException:
+                pass
         port_id, interface_id = [generate_uuid() for _ in range(2)]
         all_ports_uuid = [p.uuid for p in self.get_ports()] + [named_uuid(port_id)]
         interface = {"name": port}
