@@ -19,6 +19,7 @@ Ovsdb Manager main class.
      Authors: Ferran Cañellas <ferran.canellas@i2cat.net>
 """
 import socket
+from logging import Logger
 from typing import Dict, List
 
 from ovsdbmanager import operation
@@ -33,20 +34,25 @@ from ovsdbmanager.db.ovs import OpenVSwitch
 from ovsdbmanager.db.port import OvsPort
 from ovsdbmanager.utils import generate_uuid, named_uuid
 
+SYNTAX_ERROR = "syntax error"
+
 
 class OvsdbManager:
     def __init__(self, ip: str = "127.0.0.1", port: int = 6640, db: str = "Open_vSwitch"):
         self.query = OvsdbQuery(ip, port, db)
         self.db = db
+        self.logger = None
         try:
             self.query.echo_request()
         except socket.timeout:
             raise OvsdbQueryException("Connection timed out")
 
+    def set_logger(self, logger: Logger):
+        self.logger = logger
+
     def get_table_raw(self, table: str) -> Dict:
         result = self.query.select_from_table(table)["result"][0]
-        error = result.get("error")
-        if error == "syntax error":
+        if result.get("error") == SYNTAX_ERROR:
             raise OvsdbSyntaxError(result["details"])
         return result["rows"]
 
@@ -73,7 +79,7 @@ class OvsdbManager:
 
         result = self.query.select_from_table("Bridge", where=conds)["result"][0]
         error = result.get("error")
-        if error and error == "syntax error":
+        if error and error == SYNTAX_ERROR:
             raise OvsdbSyntaxError(result["details"])
         bridge_raw = result["rows"]
         if not bridge_raw:
@@ -131,16 +137,25 @@ class OvsdbManager:
         controller_raw = self.query.select_from_table("Controller",
                                                       where=[get_by_uuid(uuid)])
         result = controller_raw["result"][0]
-        if result.get("error") == "syntax error":
+        if result.get("error") == SYNTAX_ERROR:
             raise OvsdbSyntaxError(result["details"])
         return OvsController(result["rows"][0], self)
 
     def get_interface(self, uuid: List):
         interface_raw = self.query.select_from_table("Interface",
                                                      where=[get_by_uuid(uuid)])
-        return OvsInterface(interface_raw["result"][0]["rows"][0], self)
+        result = interface_raw["result"][0]
+        if result.get("error") == SYNTAX_ERROR:
+            raise OvsdbSyntaxError(result["details"])
+        return OvsInterface(result["rows"][0], self)
 
     def get_port(self, uuid: List = None, name: str = None):
         conds = [get_by_uuid(uuid)] if uuid else [get_by_name(name)]
-        port_raw = self.query.select_from_table("Port", where=conds)
-        return OvsPort(port_raw["result"][0]["rows"][0], self)
+        port_raw = self.query.select_from_table("Port", where=conds)["result"][0]
+        if port_raw.get("error") == SYNTAX_ERROR:
+            raise OvsdbSyntaxError(port_raw["details"])
+        if not port_raw["rows"]:
+            port_id = name or uuid
+            raise OvsdbResourceNotFoundException(f"Port {port_id} not found.")
+        return OvsPort(port_raw["rows"][0], self)
+

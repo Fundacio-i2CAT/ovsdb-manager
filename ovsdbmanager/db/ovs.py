@@ -21,6 +21,8 @@ OpenVSwitch class - base class for all the db.
 
 import json
 
+from ovsdbmanager.utils import parse_map, add_to_map
+
 
 class OpenVSwitch:
     def __init__(self, data, api):
@@ -38,3 +40,17 @@ class OpenVSwitch:
     @property
     def uuid(self):
         return getattr(self, "_uuid")
+
+    @property
+    def external_ids_dict(self):
+        external_ids = getattr(self, "external_ids")
+        if external_ids:
+            return parse_map(external_ids[1])
+        return None
+
+    def add_external_key(self, key, value):
+        external_ids = getattr(self, "external_ids")
+        if not external_ids:
+            raise AttributeError("There is no such 'external_ids' attribute")
+        add_to_map(external_ids, key, value)
+

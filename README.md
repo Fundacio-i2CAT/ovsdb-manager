@@ -1,13 +1,14 @@
 # Ovsdb Manager
 OvSDB Manager is an OpenVSwitch Database Protocol (OVSDB) Python Client 
 developed by the [i2CAT Foundation](https://www.i2cat.net/) (Barcelona). 
-It implements the basic functionalities to interact with OpenVSwitch switches (addport, delete port
+It implements the basic functionalities to interact with OpenVSwitch switches (add port, delete 
+port
  , add bridge, delete bridge, etc).
  
  Author: Ferran Cañellas <ferran.canellas@i2cat.net>
  
 ## Requirements
-* Python 3.5 or greater
+* Python 3.6 or greater
 
 ## Installation
 If you are using PiP:
