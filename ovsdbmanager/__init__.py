@@ -34,7 +34,7 @@ from ovsdbmanager.utils import generate_uuid, named_uuid
 
 
 class OvsdbManager:
-    def __init__(self, ip: str = "127.0.0.1", port: int = 6640, db: str = "Open_vSwitch"):
+    def __init__(self, *, ip: str = "127.0.0.1", port: int = 6640, db: str = "Open_vSwitch"):
         self.query = OvsdbQuery(ip, port, db)
         self.db = db
         try:

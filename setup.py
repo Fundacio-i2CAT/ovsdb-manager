@@ -10,23 +10,9 @@ from setuptools import setup, find_packages
 with open(os.path.dirname(os.path.abspath(__file__)) + "/README.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
 
-version = "unknown"
-try:
-    version = open(os.path.dirname(os.path.abspath(__file__)) + '/ovsdbmanager/_version.py',
-                   "rt").read()
-except EnvironmentError:
-    pass  # Okay, there is no version file.
-else:
-    VSRE = r"^__version__\s*=\s*['\"]([^'\"]*)['\"]"
-    mo = re.search(VSRE, version, re.M)
-    if mo:
-        version = mo.group(1)
-    else:
-        raise RuntimeError("unable to find version in ovsdbmanager/_version.py")
-
 setup(
     name="ovsdbmanager",
-    version=version,
+    version="0.1.7",
     author="Ferran Cañellas",
     author_email="ferran.canellas@i2cat.net",
     description="A Python3 OVSDB API",
